@@ -5,7 +5,9 @@
 set -e
 PREFIXPATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
+[[ -d ScoutSuite ]] || git clone git@github.com:nccgroup/ScoutSuite.git
+
 rm -rf ${PREFIXPATH}/reports
 mkdir -p ${PREFIXPATH}/reports
 
-docker build -t scout2-karl ${PREFIXPATH}
+docker build -t scoutsuite-karl ${PREFIXPATH}

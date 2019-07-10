@@ -1,28 +1,13 @@
 #!/usr/bin/env python
-"""This script wraps Scout2 and prints dangerous findings"""
+"""This script wraps ScoutSuite and prints dangerous findings"""
 
 
 from os import system
 from subprocess import call
-from json import load
+# from json import load
 
-call(["Scout2", "--no-browser", "--force", "--timestamp", "--report-dir", "/output/scout2-report"])
-#system("tail -n +2 /src/scout2-report/inc-awsconfig/aws_config.js > /src/scout2-report/inc-awsconfig/data.js")
+from ./ScoutSuite.__main__ import run_from_cli
 
-#with open("/src/scout2-report/inc-awsconfig/data.js") as data_file:
-#    data = load(data_file)
+if __name__ == "__main__":
+    sys.exit(run_from_cli())
 
-#danger_issues = False
-
-#for service, results in data["services"].iteritems():
-#    if "findings" in results and results["findings"] is not None:
-#        for rule, details in results["findings"].iteritems():
-#            if details["flagged_items"] > 0 and details["level"] == "danger":
-#                danger_issues = True
-#                print "[%s] %s : %s" % (service, details["description"], details["flagged_items"])
-
-# if danger_issues:
-#    print "Scout2 danger issues identified. Please correct the issues listed above. See scout2-report/report.html for more details"
-#    exit(1)
-#else:
-#    print "Congratulations, Scout 2 did not find any dangerous issues"
