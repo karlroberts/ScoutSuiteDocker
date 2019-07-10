@@ -1,6 +1,13 @@
 # README
-#### run the Scout2 AWS audit in a docker container and delegate roles using aws-vault
-We use aws-vault to assume Roles that can run a security audit any which ever account we have permissions for. This prevents the need to pass around AWS credentials to perform this crucial task.
+#### run the ScoutSuite Cloud infrastructure audit tool in a docker container to avoid spilling python all over your OS
+
+CloudSuite now supports AWS, Azure and Google cloud. nice.
+
+Read the docs in the [ScoutSuite Wiki](https://github.com/nccgroup/ScoutSuite/wiki) or their [Github README](https://github.com/nccgroup/ScoutSuite/blob/master/README.md)
+
+But to save time here are some notes on how I use it.
+
+We use aws-vault to assume Roles in AWS that can run a security audit any which ever account we have permissions for. This prevents the need to pass around AWS credentials to perform this crucial task.
 
 
 ## Setup the Docker image
@@ -10,7 +17,11 @@ We use aws-vault to assume Roles that can run a security audit any which ever ac
 ## Run
     
     # aws-vault exec <profile from ~/.aws/config> -- ./run.sh
-    aws-vault exec my-iam-user -- ./run.sh
+    aws-vault exec my-aws-profile1 -- ./run.sh aws --no-browser --force --timestamp --report-dir /output/scoutsuite-report --max-workers 3 --regions ap-southeast-1 ap-southeast-2 us-west-1 us-west-2 eu-west-1 sa-east-1
+
+Note that for `aws` I explicitly pass in the regions that I know I have infrastructure in (default is all) this speed up the audit but also prevents authenticatino errors that you'll see when running it. Some AWS regions are not enabled by default and if you try them your credentials fail, you can turn themi on in your AWS console or via CLI but only turn on what you need.
+
+Note that the `max-workers` is `3` this is because AWS throttles CLI queries and the default `10` always got me throttled and spewed out warnings
 
 ### aws config
 You should have set up your AWS config such that you have specified a region
@@ -45,8 +56,4 @@ Add the credentials to aws-vault
 
     aws-vault add my-iam-user
     # then follow the prompt
-
-
-
-
 
