@@ -17,7 +17,9 @@ We use aws-vault to assume Roles in AWS that can run a security audit any which 
 ## Run
     
     # aws-vault exec <profile from ~/.aws/config> -- ./run.sh
-    aws-vault exec my-aws-profile1 -- ./run.sh aws --no-browser --force --timestamp --report-dir /output/scoutsuite-report --max-workers 3 --regions ap-southeast-1 ap-southeast-2 us-west-1 us-west-2 eu-west-1 sa-east-1 --exceptions ~/path/to/my_exceptions.json
+    aws-vault exec my-aws-profile1 --assume-role-ttl=1h -- ./run.sh aws --no-browser --force --timestamp --report-dir /output/scoutsuite-report --max-workers 3 --regions ap-southeast-1 ap-southeast-2 us-west-1 us-west-2 eu-west-1 sa-east-1 --exceptions ~/path/to/my_exceptions.json
+
+Note that I change the default assume-role-ttl (time to live) from 15 minutes to 1 hour, these audits take about 30 mins so don't want acces revoked half way through.
 
 Note that for `aws` I explicitly pass in the regions that I know I have infrastructure in (default is all) this speed up the audit but also prevents authenticatino errors that you'll see when running it. Some AWS regions are not enabled by default and if you try them your credentials fail, you can turn themi on in your AWS console or via CLI but only turn on what you need.
 
